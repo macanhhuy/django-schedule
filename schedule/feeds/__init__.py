@@ -1,10 +1,12 @@
 from schedule.models import Calendar
-from django.contrib.syndication.feeds import FeedDoesNotExist
+from django.contrib.syndication.views import FeedDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
+
 from schedule.models import Calendar
-from schedule.feeds.atom import Feed
 from schedule.feeds.icalendar import ICalendarFeed
 
 
@@ -45,6 +47,10 @@ class UpcomingEventsFeed(Feed):
 
     def item_content(self, item):
         return "%s \n %s" % (item.event.title, item.event.description)
+
+
+class UpcomingEventsAtomFeed(UpcomingEventsFeed):
+    feed_type = Atom1Feed
 
 
 class CalendarICalendar(ICalendarFeed):
